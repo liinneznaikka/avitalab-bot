@@ -1,7 +1,20 @@
 import os
-from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
+import asyncio
+
+from telegram import (
+    Update,
+    ReplyKeyboardMarkup,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+)
 from telegram.constants import ParseMode
-from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    MessageHandler,
+    ContextTypes,
+    filters,
+)
 
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 BOOKING_URL = "https://n2229960.yclients.com"
@@ -29,6 +42,7 @@ QUESTION_BUTTONS = InlineKeyboardMarkup(
     ]
 )
 
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "AVITA LAB\n\nHuman OS\nСистема протоколов восстановления",
@@ -38,6 +52,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🗓 Записаться на визит",
         reply_markup=BOOKING_BUTTON,
     )
+
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
@@ -129,12 +144,22 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_markup=MENU,
         )
 
-def main():
+
+async def main():
     app = Application.builder().token(TOKEN).build()
+
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+
     print("AVITA LAB bot is running...")
-    app.run_polling()
+
+    await app.initialize()
+    await app.start()
+    await app.updater.start_polling()
+
+    while True:
+        await asyncio.sleep(3600)
+
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
