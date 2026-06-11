@@ -1,20 +1,9 @@
 import os
 import asyncio
 
-from telegram import (
-    Update,
-    ReplyKeyboardMarkup,
-    InlineKeyboardButton,
-    InlineKeyboardMarkup,
-)
+from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
-from telegram.ext import (
-    Application,
-    CommandHandler,
-    MessageHandler,
-    ContextTypes,
-    filters,
-)
+from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 
 TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 BOOKING_URL = "https://n2229960.yclients.com"
@@ -32,12 +21,12 @@ MENU = ReplyKeyboardMarkup(
 )
 
 BOOKING_BUTTON = InlineKeyboardMarkup(
-    [[InlineKeyboardButton("🗓 Открыть запись", url=BOOKING_URL)]]
+    [[InlineKeyboardButton("🗓 Записаться на визит", url=BOOKING_URL)]]
 )
 
 QUESTION_BUTTONS = InlineKeyboardMarkup(
     [
-        [InlineKeyboardButton("📩 Написать в Telegram", url="https://t.me/alexander_avitalab")],
+        [InlineKeyboardButton("📩 Написать в Telegram", url="https://t.me/Info_avitalab")],
         [InlineKeyboardButton("🗓 Записаться на визит", url=BOOKING_URL)],
     ]
 )
@@ -45,11 +34,17 @@ QUESTION_BUTTONS = InlineKeyboardMarkup(
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "AVITA LAB\n\nHuman OS\nСистема протоколов восстановления",
+        "AVITA LAB\n\n"
+        "<b><i>Human OS</i></b>\n"
+        "Система протоколов восстановления\n\n"
+        "Добро пожаловать в AVITA LAB.\n\n"
+        "Ниже вы можете выбрать интересующий раздел и подробнее узнать о принципах работы Human OS, форматах посещения и программах восстановления.",
+        parse_mode=ParseMode.HTML,
         reply_markup=MENU,
     )
+
     await update.message.reply_text(
-        "🗓 Записаться на визит",
+        "🗓 Для записи выберите удобное время:",
         reply_markup=BOOKING_BUTTON,
     )
 
@@ -119,8 +114,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "• любые протоколы платформы <b><i>Human OS</i></b>;\n"
             "• приоритетную запись;\n"
             "• комплексную работу с состоянием и ресурсом;\n"
-            "• экономию <b><i>23 700 ₽</i></b> по сравнению с разовыми посещениями.\n\n"
-            "🤍",
+            "• экономию <b><i>23 700 ₽</i></b> по сравнению с разовыми посещениями.",
             parse_mode=ParseMode.HTML,
             reply_markup=MENU,
         )
@@ -131,7 +125,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Если у вас остались вопросы, мы будем рады помочь!\n\n"
             "Для более комфортного общения рекомендуем написать нам в Telegram — так мы сможем быстрее ответить, подробнее рассказать о <b><i>Human OS</i></b> и помочь подобрать наиболее подходящий формат работы с системой.\n\n"
             "Telegram:\n"
-            "@alexander_avitalab\n\n"
+            "@Info_avitalab\n\n"
             "📞 +7 (905) 773-80-49\n\n"
             "🤍 С удовольствием ответим на ваши вопросы и поможем сделать взаимодействие с AVITA LAB максимально комфортным.",
             parse_mode=ParseMode.HTML,
